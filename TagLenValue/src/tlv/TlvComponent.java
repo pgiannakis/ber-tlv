@@ -169,7 +169,7 @@ public abstract class TlvComponent {
          return type;
      }
      
-     	protected byte[] getTag(byte[] data, int offset){
+     protected byte[] getTag(byte[] data, int offset){
     	 
          // Parse the Tag
          // 1st tag-byte
