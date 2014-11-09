@@ -38,7 +38,7 @@ public class Sample {
 		byte[] tagValue2= new byte[]{(byte)0x05,(byte)0x12,(byte)0x20}; 
 		TlvTag tag2 = new TlvTag(tagName2,tagValue2);
 		
-		ArrayList<TlvTag> tags = new ArrayList<TlvTag>();
+		ArrayList<TlvComponent> tags = new ArrayList<TlvComponent>();
         tags.add(tag1);
         tags.add(tag2);
 

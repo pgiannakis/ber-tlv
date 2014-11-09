@@ -4,12 +4,21 @@ import java.util.ArrayList;
 
 
 
-
+/**
+ * 
+ * @author Panagiotis Giannakis
+ *
+ */
 public class TlvTag extends TlvComponent{
 	
 	TlvTag tlvData;
-	ArrayList<TlvTag> tlvDataList;
+	ArrayList<TlvComponent> tlvDataList;
 	
+	/**
+	 * 
+	 * @param tagName the tag field
+	 * @param data the value field
+	 */
 	TlvTag (byte[] tagName, byte[] data){
 		this.tagName = tagName;
 		this.tagClassType = getClassType(data[0]);
@@ -18,6 +27,10 @@ public class TlvTag extends TlvComponent{
 		this.tagValue = data;
 	}
 	
+	/**
+	 * 
+	 * @param buffer a serialized tlv 
+	 */
 	TlvTag (byte[] buffer){
 		this.buffer = buffer;
 	}
@@ -32,16 +45,6 @@ public class TlvTag extends TlvComponent{
 		return size;
 	}
 	
-	public String toString(){
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("Tag   : " + toString(tagName)+"\n");
-		sb.append("Length: " + Integer.toString(tagLength)+"\n");
-		sb.append("Value : " + toString(tagValue)+"\n");
-		
-		return sb.toString();
-     }
-	 
 	public static String toString(byte[] data) {
 		StringBuilder sb = new StringBuilder();
 		for (byte b : data){
@@ -54,13 +57,14 @@ public class TlvTag extends TlvComponent{
 	void parse() throws TlvParsingException {
 		
 		int offset = 0;
-		tlvDataList = new ArrayList<TlvTag>();
+		tlvDataList = new ArrayList<TlvComponent>();
 		while (offset < buffer.length){
 			offset = parse(buffer,offset);
 			tlvDataList.add(new TlvTag(tagName,tagValue));
 		}
 	}
 	
+	@Override
 	public byte[] serialize(){
    	 	
 		ArrayList<Byte> tagContents = new ArrayList<Byte>();
@@ -70,4 +74,15 @@ public class TlvTag extends TlvComponent{
    	 
    	 	return serialize(tagContents);
     }
+	
+	@Override
+	public String toString(){
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("Tag   : " + toString(tagName)+"\n");
+		sb.append("Length: " + Integer.toString(tagLength)+"\n");
+		sb.append("Value : " + toString(tagValue)+"\n");
+		
+		return sb.toString();
+     }
 }

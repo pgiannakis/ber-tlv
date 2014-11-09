@@ -4,26 +4,39 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import debug.DumpOfHEX;
-
+/**
+ * 
+ * @author Panagiotis Giannakis
+ * </p>Any tlv data objects can be further encapsulated in a context-specific template<p>
+ */
 public class TlvTemplate extends TlvComponent{
 	
-	//public ArrayList<TlvTag> tags;
 	private byte template;
-	//private ArrayList<TlvTag> tlvTags;
-	private ArrayList<TlvTag> tlvTags;
+	private ArrayList<TlvComponent> tlvTags;
 	private byte[] constructedData;
 	
-	public TlvTemplate(byte template, ArrayList<TlvTag> tlvData){
+	/**
+	 * 
+	 * @param template 
+	 * @param tlvData tlv data objects which encapsulated in the template 
+	 */
+	public TlvTemplate(byte template, ArrayList<TlvComponent> tlvData){
 		this.setTemplate(template);
-		this.setTlvTag(tlvData);
+		this.setTlvComponent(tlvData);
 	}
 	
+	/**
+	 * 
+	 * @param constructedData a serialized template
+	 */
 	public TlvTemplate (byte[] constructedData){
 		this.constructedData = constructedData;
 	}
 	
-	public void parse() throws TlvParsingException{
-		
+	/**
+	 * parse a template data object
+	 */
+	public void parse() throws TlvParsingException{	
 		int offset = 0;
 		offset= parse(constructedData,offset);
 		offset=0;
@@ -31,12 +44,10 @@ public class TlvTemplate extends TlvComponent{
 		tlvTag.parse();
 		tlvTags = tlvTag.tlvDataList; 
 	}
-		
-	
 	
 	public byte[] serialize(){
 		ArrayList<Byte> tagData = new ArrayList<Byte>();
-		for (TlvTag tag : tlvTags){
+		for (TlvComponent tag : tlvTags){
 			addRange(tagData,tag.serialize());	
         }
 		
@@ -48,7 +59,7 @@ public class TlvTemplate extends TlvComponent{
 		
 		return serialize(constructedTemplate);
 	}
-
+	
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		sb.append("Template: " + TlvTag.toString(tagName)+"\n");  
@@ -57,46 +68,63 @@ public class TlvTemplate extends TlvComponent{
 		sb.append(TlvTag.toString(tagValue)+"\n");
 		sb.append(" ** Tags ** \n");
 		
-		for (TlvTag tag : tlvTags){
+		for (TlvComponent tag : tlvTags){
 			sb.append("---------------------------\n");
 			sb.append(tag.toString());
 		}
 		return sb.toString();
 	}
-	 
-	 public byte[] searchTag(byte[] tag){
+	
+	 /**
+	  * 
+	  * @param tagName  
+	  * @return the tag value 
+	  */
+	 public byte[] searchTag(byte[] tagName){
 		 ArrayList<Byte> tagValue =new ArrayList<Byte>();
-		 for (TlvTag currentTag : tlvTags){
-			 if (Arrays.equals(currentTag.tagName,tag)){			 
+		 for (TlvComponent currentTag : tlvTags){
+			 if (Arrays.equals(currentTag.tagName,tagName)){			 
 				 addRange(tagValue,currentTag.tagValue);
 			 }
 		 }
 		 return serialize(tagValue);
 	 }
 	 
-	public void addTlv(TlvTag tag) {
-		tlvTags.add(tag);
-	}
+	 /**
+	  * 
+	  * @param tag data object element
+	  */
+	 public void addTlvComponent(TlvComponent tag) {
+		 tlvTags.add(tag);
+	 }
 	
-	public void removeTlv(int index){
-		tlvTags.remove(index);
-	}
+	 /**
+	  * 
+	  * @param index the index of data object element
+	  */
+	 public void removeTlvComponent(int index){
+		 tlvTags.remove(index);
+	 }
 	
-	public TlvTag getTlv(int index){
+	/**
+	 * 
+	 * @param index the index of data object element
+	 * @return the data object element
+	 */
+	public TlvComponent getChild(int index){
 		return tlvTags.get(index);		
 	}
 	
-	public byte getTemplate()
-	{
+	public byte getTemplate(){
 		return tagName[0];
 	}
 	public void setTemplate(byte template) {
 		this.template = template;
 	}
-	public ArrayList<TlvTag> getTlvData() {
+	public ArrayList<TlvComponent> getTlvComponent() {
 		return tlvTags;
 	}
-	public void setTlvTag(ArrayList<TlvTag> tlvTag) {
+	public void setTlvComponent(ArrayList<TlvComponent> tlvTag) {
 		this.tlvTags = tlvTag;
 	}
 }

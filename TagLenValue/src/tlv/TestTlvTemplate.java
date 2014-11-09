@@ -14,7 +14,7 @@ public class TestTlvTemplate {
 		TlvTag tlvtag1 = new TlvTag(new byte[]{(byte)0x9A},new byte[]{(byte)0x12,(byte)0x10,(byte)0x16}); 
 		TlvTag tlvtag2 = new TlvTag(new byte[]{(byte)0x9F,(byte)0x21},new byte[]{(byte)0x16,(byte)0x29,(byte)0x04});
 		
-		ArrayList<TlvTag> tlvData = new ArrayList<TlvTag>();
+		ArrayList<TlvComponent> tlvData = new ArrayList<TlvComponent>();
 		tlvData.add(tlvtag1);
 		tlvData.add(tlvtag2);
 		TlvTemplate tlvTemplate = new TlvTemplate((byte)0xE1,tlvData);
